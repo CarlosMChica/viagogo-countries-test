@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foreground="@drawable/list_selector"
+    >
+
+    <LinearLayout
+        android:id="@+id/infoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/placeholder"
+            />
+
+        <TextView
+            android:id="@+id/countryNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:ellipsize="marquee"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            tools:text="Spain"
+            />
+
+        <TextView
+            android:id="@+id/countryRegionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:ellipsize="marquee"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            tools:text="Europe"
+            />
+
+        <TextView
+            android:id="@+id/countryPopulationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="bottom"
+            android:textColor="@android:color/white"
+            android:ellipsize="marquee"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            tools:text="156489"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

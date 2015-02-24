@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Viagogo Test</string>
+    <string name="err_getting_countries">Error getting countries</string>
+    <string name="detail">Country Detail</string>
+    <string name="countries">Countries</string>
+    <string name="country_population">Population: %1$s</string>
+    <string name="country_region">Region: %1$s</string>
+    <string name="capital">Capital: %1$s</string>
+    <string name="relevance">Relevance: %1$s</string>
+    <string name="borders">Borders</string>
+    <string name="lat_long">Lat: %1$.2f - Lon: %2$.2f</string>
+    <string name="demonym">Demonym: %1$s</string>
+    <string name="area">Area: %1$.2f</string>
+    <string name="gini">Gini: %1$.2f</string>
+    <string name="native_name">Native name: %1$s</string>
+    <string name="alpha2code">Alpha2Code: %1$s</string>
+    <string name="alpha3code">Alpha3Code: %1$s</string>
+    <string name="subregion">Sub region: %1$s</string>
+    <string name="main_info">Main info</string>
+    <string name="extra_info">Extra info</string>
+    <string name="country_region_click">Region: %1$s (Click to see countries in this region)</string>
+
+</resources>
