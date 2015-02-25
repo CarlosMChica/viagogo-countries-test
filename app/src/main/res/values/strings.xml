@@ -9,7 +9,7 @@
     <string name="country_region">Region: %1$s</string>
     <string name="capital">Capital: %1$s</string>
     <string name="relevance">Relevance: %1$s</string>
-    <string name="borders">Borders</string>
+    <string name="borders">Borders (Click to see neighboring countries)</string>
     <string name="lat_long">Lat: %1$.2f - Lon: %2$.2f</string>
     <string name="demonym">Demonym: %1$s</string>
     <string name="area">Area: %1$.2f</string>
@@ -21,5 +21,6 @@
     <string name="main_info">Main info</string>
     <string name="extra_info">Extra info</string>
     <string name="country_region_click">Region: %1$s (Click to see countries in this region)</string>
+    <string name="interactive_info">Interactive info</string>
 
 </resources>

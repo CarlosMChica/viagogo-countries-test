@@ -1,16 +1,17 @@
 package com.carlosdelachica.viagogo.modules.detail;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlosdelachica.viagogo.R;
@@ -52,8 +53,6 @@ public class DetailActivity extends BaseActivity implements DetailView {
     TextView relevanceTextView;
     @InjectView(R.id.regionTextView)
     TextView regionTextView;
-    @InjectView(R.id.bordersSpinner)
-    Spinner bordersSpinner;
     @InjectView(R.id.populationTextView)
     TextView populationTextView;
     @InjectView(R.id.latLongTextView)
@@ -72,6 +71,8 @@ public class DetailActivity extends BaseActivity implements DetailView {
     TextView alpha3CodeTextView;
     @InjectView(R.id.subRegionTextView)
     TextView subRegionTextView;
+    @InjectView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private Country country;
     private String alpha2Code;
@@ -102,6 +103,7 @@ public class DetailActivity extends BaseActivity implements DetailView {
         super.onCreate(savedInstanceState);
         parseArguments();
         initUi();
+        presenter.uiReady(alpha2Code);
     }
 
     private void parseArguments() {
@@ -110,6 +112,7 @@ public class DetailActivity extends BaseActivity implements DetailView {
 
     private void initUi() {
         initToolbar();
+        initSwipeRefreshLayout();
     }
 
     private void initToolbar() {
@@ -120,11 +123,14 @@ public class DetailActivity extends BaseActivity implements DetailView {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void initSwipeRefreshLayout() {
+        swipeRefreshLayout.setEnabled(false);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         presenter.onResume();
-        presenter.resumeData(alpha2Code);
     }
 
     @Override
@@ -133,16 +139,13 @@ public class DetailActivity extends BaseActivity implements DetailView {
     }
 
     @Override
-    public void showCountriesInRegionData(List<Country> countries) {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        String[] countryNames = new String[countries.size()];
-        for (int i = 0; i < countries.size(); i++) {
-            countryNames[i] = countries.get(i).getName();
-        }
-        arrayAdapter.addAll(countryNames);
-        new AlertDialog.Builder(this)
-                .setAdapter(arrayAdapter, null)
-                .show();
+    public void refreshUiStarted() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void refreshUiFinished() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -157,7 +160,6 @@ public class DetailActivity extends BaseActivity implements DetailView {
         showCapital();
         showRelevance();
         showRegion();
-        showBorders();
         showPopulation();
         showLatLong();
         showDemonym();
@@ -189,29 +191,16 @@ public class DetailActivity extends BaseActivity implements DetailView {
         regionTextView.setText(getString(R.string.country_region_click, country.getRegion()));
     }
 
-    private void showBorders() {
-        List<String> borders = country.getBorders();
-        borders.add(0, getString(R.string.borders));
-        final ArrayAdapter<String> bordersAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                borders);
-        bordersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        bordersSpinner.setAdapter(bordersAdapter);
-        //Workaround: Avoid firing onItemSelected automatically
-        bordersSpinner.setSelection(0, false);
-        bordersSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                new DetailActionCommand(DetailActivity.this, bordersAdapter.getItem(position)).execute();
-                finish();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+    private void showAlertDialog(List<String> elements, DialogInterface.OnClickListener onClickListener) {
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        String[] elementsArray = new String[elements.size()];
+        for (int i = 0; i < elements.size(); i++) {
+            elementsArray[i] = elements.get(i);
+        }
+        arrayAdapter.addAll(elementsArray);
+        new AlertDialog.Builder(this)
+                .setAdapter(arrayAdapter, onClickListener)
+                .show();
     }
 
     private void showPopulation() {
@@ -252,10 +241,29 @@ public class DetailActivity extends BaseActivity implements DetailView {
         subRegionTextView.setText(getString(R.string.subregion, country.getSubregion()));
     }
 
+    @OnClick(R.id.bordersTextView)
+    public void onBordersClick() {
+        showAlertDialog(country.getBorders(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new DetailActionCommand(DetailActivity.this, country.getBorders().get(which)).execute();
+                finish();
+            }
+        });
+    }
 
     @OnClick(R.id.regionTextView)
     public void onRegionClick() {
         presenter.onRegionClicked(country.getRegion());
+    }
+
+    @Override
+    public void showCountriesInRegionData(List<Country> countries) {
+        String[] countryNames = new String[countries.size()];
+        for (int i = 0; i < countries.size(); i++) {
+            countryNames[i] = countries.get(i).getName();
+        }
+        showAlertDialog(Arrays.asList(countryNames), null);
     }
 
     @Override

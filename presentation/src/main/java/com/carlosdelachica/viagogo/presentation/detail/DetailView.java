@@ -8,4 +8,6 @@ public interface DetailView {
     void showGetCountryError();
     void showCountryData(Country country);
     void showCountriesInRegionData(List<Country> countries);
+    void refreshUiStarted();
+    void refreshUiFinished();
 }

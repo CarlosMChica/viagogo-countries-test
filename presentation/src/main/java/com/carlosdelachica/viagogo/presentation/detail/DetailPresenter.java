@@ -28,12 +28,14 @@ public class DetailPresenter extends Presenter {
         this.detailView = detailView;
     }
 
-    public void resumeData(String alpha2Code) {
+    public void uiReady(String alpha2Code) {
+        detailView.refreshUiStarted();
         getCountryInteractor.setAlpha2Code(alpha2Code);
         interactorExecutor.execute(getCountryInteractor);
     }
 
     public void onRegionClicked(String region) {
+        detailView.refreshUiStarted();
         getCountriesInRegionInteractor.setRegion(region);
         interactorExecutor.execute(getCountriesInRegionInteractor);
     }
@@ -47,6 +49,7 @@ public class DetailPresenter extends Presenter {
     }
 
     public void onEvent(GetCountryEvent event) {
+        detailView.refreshUiFinished();
         if (event.getError() == null && event.getCountry() != null) {
             detailView.showCountryData(event.getCountry());
         } else {
@@ -55,6 +58,7 @@ public class DetailPresenter extends Presenter {
     }
 
     public void onEvent(GetCountriesInRegionEvent event) {
+        detailView.refreshUiFinished();
         if (event.getError() == null && event.getCountries() != null) {
             detailView.showCountriesInRegionData(event.getCountries());
         } else {
